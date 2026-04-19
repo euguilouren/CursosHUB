@@ -549,25 +549,8 @@
 
   /* Vertical scroll arrow at bottom of hero */
   
-  .chevron-stack {
-    display: flex; flex-direction: column; align-items: center;
-    gap: -4px;
-  }
-  .chevron-stack svg {
-    width: 28px; height: 18px;
-    color: var(--gold);
-    filter: drop-shadow(0 0 4px rgba(201,168,76,0.8));
-    margin-top: -6px;
-  }
-  .chevron-stack svg:nth-child(1) { animation: chevDown 1.5s ease-in-out infinite 0s;   opacity: 0.3; }
-  .chevron-stack svg:nth-child(2) { animation: chevDown 1.5s ease-in-out infinite .2s;  opacity: 0.6; }
-  .chevron-stack svg:nth-child(3) { animation: chevDown 1.5s ease-in-out infinite .4s;  opacity: 1.0; }
-  @keyframes chevDown {
-    0%,100% { transform: translateY(-3px); opacity: 0.2; }
     50%      { transform: translateY(4px);  opacity: 1; filter: drop-shadow(0 0 8px rgba(201,168,76,1)); }
   }
-  @keyframes bounceDown {
-    0%,100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
     50%      { transform: translateX(-50%) translateY(8px); opacity: 1; }
   }
 
@@ -672,8 +655,7 @@
   .scroll-down-arrow .chevron { width:18px;height:10px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(45deg); }
   .scroll-down-arrow .chevron:nth-child(1){animation:chevFade 1.5s ease-in-out infinite 0s;}
   .scroll-down-arrow .chevron:nth-child(2){animation:chevFade 1.5s ease-in-out infinite .25s;}
-  .scroll-down-arrow .chevron:nth-child(3){animation:chevFade 1.5s ease-in-out infinite .5s;}
-  @keyframes chevFade{0%,100%{opacity:.12}50%{opacity:1}}
+  .scroll-down-arrow .chevron:nth-child(3){animation:chevFade 1.5s ease-in-out infinite .5s;}50%{opacity:1}}
 
 
   /* ── LIGHT STREAKS (faróis de carro) ── */
@@ -729,22 +711,6 @@
 
 
 
-  /* ── SCROLL ARROW (fixed, both devices) ── */
-  .arrow-desktop, .arrow-mobile {
-    position: fixed;
-    bottom: 48px; left: 50%;
-    transform: translateX(-50%);
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    color: var(--gold); font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-    animation: bounceDown 1.8s ease-in-out infinite;
-    cursor: pointer; white-space: nowrap; z-index: 200;
-    transition: opacity 0.4s ease;
-  }
-  /* Desktop: show .arrow-desktop, hide .arrow-mobile */
-  @media(min-width:769px) { .arrow-mobile { display: none !important; } }
-  /* Mobile: show .arrow-mobile, hide .arrow-desktop */
-  @media(max-width:768px)  { .arrow-desktop { display: none !important; } }
-
 </style>
 </head>
 <body>
@@ -785,21 +751,7 @@
   <button class="hamburger" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
-</nav>
-<div id="scroll-arrow" class="arrow-desktop" onclick="document.getElementById('sobre').scrollIntoView({behavior:'smooth'})">
-  <span style="font-size:10px;letter-spacing:3px;opacity:0.75;margin-bottom:6px;display:block">role para baixo</span>
-  <div class="chevron-stack">    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-  </div>
-</div>
-<div id="scroll-arrow-mob" class="arrow-mobile" onclick="document.getElementById('sobre').scrollIntoView({behavior:'smooth'})">
-  <span style="font-size:10px;letter-spacing:3px;opacity:0.75;margin-bottom:6px;display:block">role para baixo</span>
-  <div class="chevron-stack">    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-  </div>
-</div>
+</nav></div></div>
 
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobile-menu">
@@ -1084,14 +1036,6 @@ window.addEventListener('scroll', () => {
 
   // Foto some ao passar do hero
   photoLayer.style.opacity = Math.max(0, 1 - sy / (heroH * 0.85));
-
-  // Seta some ao rolar
-  const arr = document.getElementById('scroll-arrow');
-  if (arr) {
-    arr.style.transition = 'opacity 0.4s ease';
-    arr.style.opacity = sy > 50 ? '0' : '1';
-    arr.style.pointerEvents = sy > 50 ? 'none' : 'auto';
-  }
 }, { passive: true });
 
 // ── BLINK — animate eyelids over the photo eyes ──
