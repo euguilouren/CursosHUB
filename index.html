@@ -69,7 +69,6 @@
     will-change: transform;
     /* Breathing: subtle scale + lift */
     animation: breathe 7s ease-in-out infinite;
-    transform-origin: center 35%; /* pivot near eyes */
   }
 
   /* Dark vignette — does NOT fade photo, just softens edges + bottom */
@@ -1028,14 +1027,22 @@ const lids     = [
   document.getElementById('lt-r'), document.getElementById('lb-r')
 ];
 
-// ── PARALLAX — photo follows scroll, never disappears ──
+// ── ZOOM TO FACE on scroll ──
 window.addEventListener('scroll', () => {
-  const sy = window.scrollY;
-  // move photo at 30% of scroll speed downward (follows content)
-  photoImg.style.transform = `translateY(calc(${sy * 0.06}px))`;
-  // also nudge eye-pair to stay on eyes
-  document.querySelector('.eye-pair').style.transform =
-    `translate(-50%, calc(-50% + ${sy * 0.0}px))`;
+  const sy       = window.scrollY;
+  const heroH    = document.getElementById('hero').offsetHeight;
+  const progress = Math.min(sy / (heroH * 0.9), 1);
+
+  // Scale 1.0 (afastado) → 1.30 (rosto)
+  const scale = 1 + progress * 0.30;
+  // Transform origin sobe em direção ao rosto conforme zoom aumenta
+  const posY  = 15 + progress * 12;
+
+  photoImg.style.transform       = `scale(${scale.toFixed(4)})`;
+  photoImg.style.transformOrigin = `center ${posY.toFixed(1)}%`;
+
+  // Foto some ao passar do hero
+  photoLayer.style.opacity = Math.max(0, 1 - sy / (heroH * 0.85));
 }, { passive: true });
 
 // ── BLINK — animate eyelids over the photo eyes ──
