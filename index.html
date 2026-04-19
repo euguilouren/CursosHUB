@@ -711,6 +711,14 @@
 
 
 
+
+  /* Solid content background — covers photo below hero */
+  #content-bg {
+    position: relative;
+    z-index: 10;
+    background: var(--bg);
+  }
+
 </style>
 </head>
 <body>
@@ -782,6 +790,7 @@
 
 </div>
 
+<div id="content-bg">
 <section id="sobre" class="reveal">
   <span class="section-tag">01 · Perfil</span>
   <h2 class="section-title">Sobre Mim</h2>
@@ -1012,6 +1021,7 @@
   <p style="margin-top:24px">« A intersecção entre tecnologia e negócio é onde o valor real é criado. »</p>
   <p style="margin-top:12px;font-size:11px"><span>Luan Guilherme Lourenço</span> · Brasília, Brasil · 2025</p>
 </footer>
+</div><!-- /content-bg -->
 
 <script>
 const photoImg = document.getElementById('photo-img');
@@ -1035,7 +1045,7 @@ window.addEventListener('scroll', () => {
   photoImg.style.transformOrigin = `center ${posY.toFixed(1)}%`;
 
   // Foto some ao passar do hero
-  photoLayer.style.opacity = Math.max(0, 1 - sy / (heroH * 0.85));
+  photoLayer.style.opacity = Math.max(0, 1 - sy / (heroH * 0.45));
 }, { passive: true });
 
 // ── BLINK — animate eyelids over the photo eyes ──
