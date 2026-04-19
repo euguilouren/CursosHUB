@@ -1024,7 +1024,7 @@ const lids     = [
 window.addEventListener('scroll', () => {
   const sy = window.scrollY;
   // move photo at 30% of scroll speed downward (follows content)
-  photoImg.style.transform = `translateY(calc(${sy * 0.30}px))`;
+  photoImg.style.transform = `translateY(calc(${sy * 0.12}px))`;
   // also nudge eye-pair to stay on eyes
   document.querySelector('.eye-pair').style.transform =
     `translate(-50%, calc(-50% + ${sy * 0.0}px))`;
