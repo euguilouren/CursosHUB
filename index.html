@@ -817,7 +817,7 @@
     <a href="#contato" class="btn btn-primary">✦ Entrar em Contato</a>
     <a href="https://github.com/euguilouren" target="_blank" class="btn btn-outline">⌥ GitHub</a>
   </div>
-  <div class="scroll-down-arrow" onclick="document.getElementById('sobre').scrollIntoView({behavior:'smooth'})">
+  <div id="scroll-arrow" class="scroll-down-arrow" onclick="document.getElementById('sobre').scrollIntoView({behavior:'smooth'})">
     <span style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);opacity:0.75;margin-bottom:8px;display:block">role para baixo</span>
     <div class="chevron-stack">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -1081,6 +1081,14 @@ window.addEventListener('scroll', () => {
 
   // Foto some ao passar do hero
   photoLayer.style.opacity = Math.max(0, 1 - sy / (heroH * 0.85));
+
+  // Seta some ao rolar
+  const arr = document.getElementById('scroll-arrow');
+  if (arr) {
+    arr.style.transition = 'opacity 0.4s ease';
+    arr.style.opacity = sy > 50 ? '0' : '1';
+    arr.style.pointerEvents = sy > 50 ? 'none' : 'auto';
+  }
 }, { passive: true });
 
 // ── BLINK — animate eyelids over the photo eyes ──
