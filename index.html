@@ -547,6 +547,24 @@
   }
 
   /* Vertical scroll arrow at bottom of hero */
+  
+  .chevron-stack {
+    display: flex; flex-direction: column; align-items: center;
+    gap: -4px;
+  }
+  .chevron-stack svg {
+    width: 28px; height: 18px;
+    color: var(--gold);
+    filter: drop-shadow(0 0 4px rgba(201,168,76,0.8));
+    margin-top: -6px;
+  }
+  .chevron-stack svg:nth-child(1) { animation: chevDown 1.5s ease-in-out infinite 0s;   opacity: 0.3; }
+  .chevron-stack svg:nth-child(2) { animation: chevDown 1.5s ease-in-out infinite .2s;  opacity: 0.6; }
+  .chevron-stack svg:nth-child(3) { animation: chevDown 1.5s ease-in-out infinite .4s;  opacity: 1.0; }
+  @keyframes chevDown {
+    0%,100% { transform: translateY(-3px); opacity: 0.2; }
+    50%      { transform: translateY(4px);  opacity: 1; filter: drop-shadow(0 0 8px rgba(201,168,76,1)); }
+  }
   .scroll-down-arrow {
     position: absolute; bottom: 28px; left: 50%;
     transform: translateX(-50%);
@@ -646,6 +664,49 @@
   .scroll-down-arrow .chevron:nth-child(3){animation:chevFade 1.5s ease-in-out infinite .5s;}
   @keyframes chevFade{0%,100%{opacity:.12}50%{opacity:1}}
 
+
+  /* ── LIGHT STREAKS (faróis de carro) ── */
+  #light-streaks {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .streak {
+    position: absolute;
+    height: 1px;
+    border-radius: 100%;
+    opacity: 0;
+  }
+  /* White streak (headlight) */
+  .streak-white {
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.7) 50%, transparent 100%);
+    box-shadow: 0 0 8px 2px rgba(255,255,255,0.3), 0 0 20px 4px rgba(255,255,255,0.15);
+  }
+  /* Gold streak (warm light) */
+  .streak-gold {
+    background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.6) 50%, transparent 100%);
+    box-shadow: 0 0 8px 2px rgba(201,168,76,0.3), 0 0 20px 4px rgba(201,168,76,0.1);
+  }
+  /* Blue-white streak (cold headlight) */
+  .streak-blue {
+    background: linear-gradient(90deg, transparent 0%, rgba(180,220,255,0.5) 50%, transparent 100%);
+    box-shadow: 0 0 8px 2px rgba(180,220,255,0.2);
+  }
+
+  @keyframes streakPass {
+    0%   { transform: translateX(-100vw) skewX(-12deg); opacity: 0; }
+    5%   { opacity: 1; }
+    95%  { opacity: 1; }
+    100% { transform: translateX(200vw)  skewX(-12deg); opacity: 0; }
+  }
+  @keyframes streakPassRev {
+    0%   { transform: translateX(200vw)  skewX(12deg); opacity: 0; }
+    5%   { opacity: 1; }
+    95%  { opacity: 1; }
+    100% { transform: translateX(-100vw) skewX(12deg); opacity: 0; }
+  }
 </style>
 </head>
 <body>
@@ -732,7 +793,19 @@
       <div class="about-stat"><span class="about-stat-val">2</span><span class="about-stat-label">Formações</span></div>
       <div class="about-stat"><span class="about-stat-val">23</span><span class="about-stat-label">Certificações</span></div>
       <div class="about-stat"><span class="about-stat-val">4</span><span class="about-stat-label">Sistemas ERP</span></div>
-      <div class="about-stat"><span class="about-stat-val">BSB</span><span class="about-stat-label">Brasil 🇧🇷</span></div>
+      <div class="about-stat" style="position:relative;overflow:hidden">
+      <!-- Brazilian flag faded background -->
+      <div style="position:absolute;inset:0;opacity:0.12;pointer-events:none">
+        <svg viewBox="0 0 720 504" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;object-fit:cover">
+          <rect width="720" height="504" fill="#009c3b"/>
+          <polygon points="360,40 680,252 360,464 40,252" fill="#ffdf00"/>
+          <circle cx="360" cy="252" r="120" fill="#002776"/>
+          <path d="M240,220 Q360,180 480,220 Q360,310 240,220Z" fill="white" opacity="0.5"/>
+        </svg>
+      </div>
+      <span class="about-stat-val" style="position:relative;z-index:1">BSB</span>
+      <span class="about-stat-label" style="position:relative;z-index:1">Brasil 🇧🇷</span>
+    </div>
     </div>
   </div>
 </section>
@@ -1021,6 +1094,38 @@ document.querySelectorAll('.card-track').forEach((track) => {
   track.addEventListener('scroll', update, { passive: true });
   update();
 });
+
+
+// ── LIGHT STREAKS — faróis passando pela foto ──
+(function() {
+  const container = document.getElementById('light-streaks');
+  if (!container) return;
+
+  const streakTypes = ['streak-white','streak-gold','streak-blue','streak-white'];
+
+  const configs = [
+    { top:'18%', width:'35vw', height:'1.5px', duration:2.8, delay:0,    type:'streak-white', dir:'normal' },
+    { top:'22%', width:'20vw', height:'0.8px', duration:3.4, delay:1.2,  type:'streak-gold',  dir:'normal' },
+    { top:'28%', width:'45vw', height:'2px',   duration:2.2, delay:0.5,  type:'streak-white', dir:'reverse' },
+    { top:'33%', width:'28vw', height:'1px',   duration:4.0, delay:2.8,  type:'streak-blue',  dir:'normal' },
+    { top:'38%', width:'18vw', height:'1px',   duration:2.6, delay:1.7,  type:'streak-gold',  dir:'reverse' },
+    { top:'44%', width:'38vw', height:'1.5px', duration:3.1, delay:0.3,  type:'streak-white', dir:'normal' },
+    { top:'50%', width:'22vw', height:'0.8px', duration:3.8, delay:3.5,  type:'streak-blue',  dir:'reverse' },
+    { top:'55%', width:'30vw', height:'1.2px', duration:2.4, delay:2.1,  type:'streak-gold',  dir:'normal' },
+  ];
+
+  configs.forEach(cfg => {
+    const el = document.createElement('div');
+    el.className = 'streak ' + cfg.type;
+    el.style.cssText = `
+      top: ${cfg.top};
+      width: ${cfg.width};
+      height: ${cfg.height};
+      animation: ${cfg.dir === 'reverse' ? 'streakPassRev' : 'streakPass'} ${cfg.duration}s linear ${cfg.delay}s infinite;
+    `;
+    container.appendChild(el);
+  });
+})();
 
 // ── HORIZONTAL SCROLL ──
 document.querySelectorAll('.card-track').forEach(t => {
