@@ -705,6 +705,45 @@
     95%  { opacity: 1; }
     100% { transform: translateX(-100vw) skewX(12deg); opacity: 0; }
   }
+
+  /* ── CINEMATIC CANVAS ── */
+  #cinematic-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 1;
+  }
+
+  /* Vignette overlay — cinematic letterbox feel */
+  #cinematic-vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%),
+      linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 15%, transparent 85%, rgba(0,0,0,0.4) 100%);
+  }
+
+  /* Film grain overlay */
+  #film-grain {
+    position: fixed;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
+    animation: grainShift 0.12s steps(1) infinite;
+  }
+  @keyframes grainShift {
+    0%   { transform: translate(0,0); }
+    25%  { transform: translate(-2px,1px); }
+    50%  { transform: translate(1px,-2px); }
+    75%  { transform: translate(-1px,2px); }
+    100% { transform: translate(2px,-1px); }
+  }
+
 </style>
 </head>
 <body>
@@ -716,6 +755,9 @@
 
 <!-- LIGHT STREAKS -->
 <div id="light-streaks"></div>
+<canvas id="cinematic-canvas"></canvas>
+<div id="cinematic-vignette"></div>
+<div id="film-grain"></div>
 
 
 <!-- EYE BLINK LAYER -->
@@ -1129,6 +1171,131 @@ document.querySelectorAll('.card-track').forEach((track) => {
     `;
     container.appendChild(el);
   });
+})();
+
+
+// ── CINEMATIC EFFECT — particles, dust, volumetric light ──
+(function() {
+  const canvas = document.getElementById('cinematic-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Floating dust particles
+  const particles = Array.from({ length: 80 }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: Math.random() * 1.5 + 0.3,
+    vx: (Math.random() - 0.5) * 0.18,
+    vy: -Math.random() * 0.25 - 0.05,
+    alpha: Math.random() * 0.5 + 0.1,
+    flicker: Math.random() * Math.PI * 2,
+    flickerSpeed: Math.random() * 0.04 + 0.01,
+  }));
+
+  // Volumetric light rays from top
+  const rays = [
+    { x: 0.28, angle: 0.18, width: 0.06, alpha: 0.04, speed: 0.0008 },
+    { x: 0.55, angle: -0.08, width: 0.09, alpha: 0.06, speed: 0.0005 },
+    { x: 0.72, angle: 0.12, width: 0.04, alpha: 0.03, speed: 0.0012 },
+  ];
+
+  // Floating orbs (bokeh)
+  const orbs = Array.from({ length: 6 }, () => ({
+    x: Math.random(),
+    y: Math.random() * 0.7,
+    r: Math.random() * 60 + 30,
+    alpha: Math.random() * 0.04 + 0.01,
+    vx: (Math.random() - 0.5) * 0.0002,
+    vy: -Math.random() * 0.0001,
+    hue: Math.random() > 0.5 ? 42 : 200, // gold or blue
+    phase: Math.random() * Math.PI * 2,
+  }));
+
+  let t = 0;
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const W = canvas.width, H = canvas.height;
+    t += 0.016;
+
+    // ── Volumetric rays ──
+    rays.forEach(ray => {
+      ray.angle += ray.speed;
+      const cx = ray.x * W;
+      const spread = ray.width * W;
+      const grad = ctx.createLinearGradient(cx, 0, cx, H * 0.85);
+      grad.addColorStop(0, `rgba(201,168,76,${ray.alpha})`);
+      grad.addColorStop(0.4, `rgba(201,168,76,${ray.alpha * 0.5})`);
+      grad.addColorStop(1, 'rgba(201,168,76,0)');
+      ctx.save();
+      ctx.translate(cx, 0);
+      ctx.rotate(ray.angle);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(-spread, 0);
+      ctx.lineTo(spread, 0);
+      ctx.lineTo(spread * 2.5, H);
+      ctx.lineTo(-spread * 2.5, H);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    });
+
+    // ── Bokeh orbs ──
+    orbs.forEach(orb => {
+      orb.x += orb.vx;
+      orb.y += orb.vy;
+      orb.phase += 0.008;
+      if (orb.y < -0.1) orb.y = 0.8;
+      if (orb.x < -0.1) orb.x = 1.1;
+      if (orb.x > 1.1)  orb.x = -0.1;
+
+      const pulse = Math.sin(orb.phase) * 0.3 + 0.7;
+      const grad = ctx.createRadialGradient(
+        orb.x * W, orb.y * H, 0,
+        orb.x * W, orb.y * H, orb.r * pulse
+      );
+      const a = orb.alpha * pulse;
+      grad.addColorStop(0, `hsla(${orb.hue},80%,70%,${a})`);
+      grad.addColorStop(1, `hsla(${orb.hue},80%,70%,0)`);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(orb.x * W, orb.y * H, orb.r * pulse, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // ── Dust particles ──
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.flicker += p.flickerSpeed;
+      if (p.y < -5) { p.y = H + 5; p.x = Math.random() * W; }
+      if (p.x < -5) p.x = W + 5;
+      if (p.x > W + 5) p.x = -5;
+
+      const flicker = Math.sin(p.flicker) * 0.4 + 0.6;
+      ctx.save();
+      ctx.globalAlpha = p.alpha * flicker;
+      ctx.fillStyle = '#fff';
+      ctx.shadowColor = 'rgba(201,168,76,0.8)';
+      ctx.shadowBlur = 4;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
 })();
 
 // ── HORIZONTAL SCROLL ──
