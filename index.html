@@ -269,7 +269,7 @@
     /* Nav */
     nav { padding:14px 20px; }
     .nav-links { display:none; }
-    .hamburger { display: flex; }
+    
 
     /* Layout */
     .about-grid { grid-template-columns:1fr; }
@@ -290,12 +290,12 @@
     .about-stat { padding: 18px 12px; }
     .about-stat-val { font-size: 28px; }
 
-    /* Certifications — compact 2 columns */
-    .cert-grid { grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 20px; }
-    .cert-card { padding: 12px 14px; }
-    .cert-name { font-size: 12px; }
-    .cert-issuer { font-size: 11px; }
-    .cert-year { font-size: 10px; }
+    /* Certifications — ultra compact on mobile */
+    .cert-grid { grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 18px; }
+    .cert-card { padding: 10px 12px; }
+    .cert-name { font-size: 11px; line-height: 1.25; }
+    .cert-issuer { font-size: 10px; margin-top: 2px; }
+    .cert-year { font-size: 9px; margin-top: 1px; }
 
     /* Swipe pill — smaller */
     .corner-swipe { bottom: 12px; right: 12px; padding: 5px 10px 5px 8px; }
@@ -303,6 +303,11 @@
     .swipe-label { font-size: 9px; letter-spacing: 1px; }
     .swipe-dot { width: 4px; height: 4px; }
     .swipe-dots { gap: 3px; }
+
+
+    /* Certificações section padding reduced */
+    #certificacoes { padding: 40px 20px; }
+    #certificacoes h2 { font-size: 28px; }
 
     /* Biography card */
     .bio-section { padding: 28px 22px; }
@@ -322,24 +327,11 @@
   }
   .btn-lang:hover { color: var(--gold); border-color: var(--gold); }
 
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-    padding: 4px;
-    z-index: 200;
-  }
-  .hamburger span {
-    display: block;
-    width: 24px; height: 2px;
-    background: var(--gold);
-    border-radius: 2px;
-    transition: all .3s ease;
-  }
-  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .hamburger.open span:nth-child(2) { opacity: 0; }
-  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  
+  
+  
+  
+  
 
   .mobile-menu {
     display: none;
@@ -384,7 +376,7 @@
   }
   .btn-lang:hover { color: var(--gold); border-color: var(--gold); }
 
-  .hamburger { display: flex; }
+  
     .nav-links { display: none !important; }
   }
 
@@ -742,6 +734,33 @@
     75%  { transform: translate(-1px,2px); }
     100% { transform: translate(2px,-1px); }
   }
+
+
+  /* ── HAMBURGER ── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 8px;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    z-index: 200;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px; height: 2px;
+    background: #C9A84C;
+    border-radius: 2px;
+    transition: all .3s ease;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 </style>
 </head>
