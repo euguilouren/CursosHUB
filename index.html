@@ -495,64 +495,55 @@
   /* ── SCROLL INDICATORS ── */
   .swipe-hint { display: none; } /* hidden — replaced by corner arrow */
 
-  /* ── DRAMATIC PULSING CORNER ARROW ── */
+  /* ── SWIPE PILL INDICATOR ── */
   .corner-swipe {
     position: absolute;
-    bottom: 16px; right: 16px;
+    bottom: 20px; right: 20px;
     z-index: 10;
-    display: flex; align-items: center; justify-content: center;
-    width: 52px; height: 52px;
-    pointer-events: none;
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(8,8,16,0.75);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(201,168,76,0.35);
+    border-radius: 100px;
+    padding: 8px 16px 8px 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.1);
   }
 
-  /* Ripple rings */
-  .corner-swipe::before,
-  .corner-swipe::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 2px solid var(--gold);
-    animation: rippleOut 2s ease-out infinite;
+  /* Animated hand icon */
+  .swipe-hand {
+    font-size: 18px;
+    display: block;
+    animation: handSlide 1.6s ease-in-out infinite;
+    transform-origin: center;
   }
-  .corner-swipe::after { animation-delay: 1s; }
-
-  @keyframes rippleOut {
-    0%   { transform: scale(0.6); opacity: 0.9; }
-    100% { transform: scale(1.9); opacity: 0; }
+  @keyframes handSlide {
+    0%   { transform: translateX(0)   rotate(0deg);  opacity: 0.6; }
+    30%  { transform: translateX(6px) rotate(-8deg); opacity: 1;   }
+    60%  { transform: translateX(0)   rotate(0deg);  opacity: 0.8; }
+    100% { transform: translateX(0)   rotate(0deg);  opacity: 0.6; }
   }
 
-  /* Glowing circle background */
-  .corner-pulse-bg {
-    position: absolute;
-    inset: 8px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(201,168,76,0.35) 0%, rgba(201,168,76,0.08) 70%);
-    animation: bgPulse 1.2s ease-in-out infinite;
+  /* Sliding dots */
+  .swipe-dots {
+    display: flex; gap: 4px; align-items: center;
   }
-  @keyframes bgPulse {
-    0%,100% { transform: scale(1);    opacity: 0.7; }
-    50%      { transform: scale(1.15); opacity: 1; }
+  .swipe-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--gold);
+    animation: dotFade 1.6s ease-in-out infinite;
+  }
+  .swipe-dot:nth-child(1) { animation-delay: 0s; }
+  .swipe-dot:nth-child(2) { animation-delay: .2s; }
+  .swipe-dot:nth-child(3) { animation-delay: .4s; }
+  @keyframes dotFade {
+    0%,100% { opacity: 0.2; transform: scale(0.7); }
+    50%      { opacity: 1;   transform: scale(1.2); }
   }
 
-  /* The three chevrons stacked */
-  .corner-chevrons {
-    position: relative; z-index: 2;
-    display: flex; align-items: center; gap: -2px;
-  }
-  .corner-chevrons svg {
-    width: 14px; height: 14px;
-    color: var(--gold);
-    filter: drop-shadow(0 0 5px rgba(201,168,76,1));
-    animation: chevronFlash 1.2s ease-in-out infinite;
-  }
-  .corner-chevrons svg:nth-child(1) { animation-delay: 0s;    opacity: 0.4; }
-  .corner-chevrons svg:nth-child(2) { animation-delay: .18s;  opacity: 0.7; }
-  .corner-chevrons svg:nth-child(3) { animation-delay: .36s;  opacity: 1; }
-
-  @keyframes chevronFlash {
-    0%,100% { opacity: 0.2; transform: translateX(-2px); filter: drop-shadow(0 0 2px rgba(201,168,76,0.4)); }
-    50%      { opacity: 1;   transform: translateX(3px);  filter: drop-shadow(0 0 8px rgba(201,168,76,1)); }
+  .swipe-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--gold);
+    font-family: var(--font);
   }
 
   /* Vertical scroll arrow at bottom of hero */
@@ -756,12 +747,13 @@
   </div>
   <div style="position:relative">
   <div class="corner-swipe">
-    <div class="corner-pulse-bg"></div>
-    <div class="corner-chevrons">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    <span class="swipe-hand">👆</span>
+    <div class="swipe-dots">
+      <div class="swipe-dot"></div>
+      <div class="swipe-dot"></div>
+      <div class="swipe-dot"></div>
     </div>
+    <span class="swipe-label">deslize</span>
   </div>
   <div class="card-track-wrap" style="position:relative">
   <div class="swipe-hint">
@@ -796,12 +788,13 @@
   </div>
   <div style="position:relative">
   <div class="corner-swipe">
-    <div class="corner-pulse-bg"></div>
-    <div class="corner-chevrons">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    <span class="swipe-hand">👆</span>
+    <div class="swipe-dots">
+      <div class="swipe-dot"></div>
+      <div class="swipe-dot"></div>
+      <div class="swipe-dot"></div>
     </div>
+    <span class="swipe-label">deslize</span>
   </div>
   <div class="card-track-wrap" style="position:relative">
   <div class="swipe-hint">
@@ -834,12 +827,13 @@
   </div>
   <div style="position:relative">
   <div class="corner-swipe">
-    <div class="corner-pulse-bg"></div>
-    <div class="corner-chevrons">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    <span class="swipe-hand">👆</span>
+    <div class="swipe-dots">
+      <div class="swipe-dot"></div>
+      <div class="swipe-dot"></div>
+      <div class="swipe-dot"></div>
     </div>
+    <span class="swipe-label">deslize</span>
   </div>
   <div class="card-track-wrap" style="position:relative">
   <div class="swipe-hint">
