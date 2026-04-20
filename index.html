@@ -1635,29 +1635,36 @@ document.querySelectorAll('.cert-card:not(.stagger-child), .proj-card:not(.stagg
 
   // ═══ CINEMATIC BACKGROUND MUSIC (real audio file) ═══
   let musicPlaying = false;
-  let bgAudio = null;
+
+  // Create audio element IMMEDIATELY on page load so it preloads while user reads
+  const bgAudio = new Audio('https://raw.githubusercontent.com/euguilouren/euguilouren/main/assets/bg-music.mp3');
+  bgAudio.loop = true;
+  bgAudio.volume = 0.35;
+  bgAudio.preload = 'auto';
+  bgAudio.crossOrigin = 'anonymous';
+  // Force load
+  bgAudio.load();
 
   function startMusic() {
     if (musicPlaying || muted) return;
-    if (!bgAudio) {
-      bgAudio = new Audio('https://raw.githubusercontent.com/euguilouren/euguilouren/main/assets/bg-music.mp3');
-      bgAudio.loop = true;
-      bgAudio.volume = 0.35;
-      bgAudio.preload = 'auto';
+    const playPromise = bgAudio.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        musicPlaying = true;
+      }).catch(err => {
+        // Retry once after a short delay (handles loading race conditions)
+        setTimeout(() => {
+          if (!muted && !musicPlaying) {
+            bgAudio.play().then(() => { musicPlaying = true; }).catch(() => {});
+          }
+        }, 500);
+      });
     }
-    bgAudio.play().then(() => {
-      musicPlaying = true;
-    }).catch(err => {
-      console.log('Music autoplay blocked:', err);
-    });
   }
 
   function stopMusic() {
     musicPlaying = false;
-    if (bgAudio) {
-      bgAudio.pause();
-      bgAudio.currentTime = 0;
-    }
+    bgAudio.pause();
   }
 
   // Unlock audio on first user interaction (browser requirement)
