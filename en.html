@@ -1661,14 +1661,18 @@ document.querySelectorAll('.cert-card:not(.stagger-child), .proj-card:not(.stagg
   }
 
   // Unlock audio on first user interaction (browser requirement)
+  // Use CAPTURE phase so this fires BEFORE any other handlers, regardless of where the click lands
+  let unlocked = false;
   const unlock = () => {
+    if (unlocked) return;
+    unlocked = true;
     getCtx();
-    if (!muted) setTimeout(() => startMusic(), 300);
-    document.removeEventListener('click', unlock);
-    document.removeEventListener('touchstart', unlock);
+    if (!muted) startMusic();
   };
-  document.addEventListener('click', unlock, { once: true });
-  document.addEventListener('touchstart', unlock, { once: true });
+  // Listen on multiple events with capture=true
+  ['click', 'touchstart', 'keydown', 'mousedown', 'scroll'].forEach(evt => {
+    document.addEventListener(evt, unlock, { capture: true, passive: true });
+  });
 
   // ═══ BIND SOUNDS TO UI EVENTS ═══
 
