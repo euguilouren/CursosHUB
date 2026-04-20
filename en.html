@@ -1633,132 +1633,31 @@ document.querySelectorAll('.cert-card:not(.stagger-child), .proj-card:not(.stagg
     }
   };
 
-  // ═══ AMBIENT CINEMATIC BACKGROUND MUSIC ═══
-  // Dark, pulsing loop with deep bass hits + sustained drone
+  // ═══ CINEMATIC BACKGROUND MUSIC (real audio file) ═══
   let musicPlaying = false;
-  let musicNodes = [];
-  let beatInterval = null;
+  let bgAudio = null;
 
   function startMusic() {
     if (musicPlaying || muted) return;
-    const ctx = getCtx();
-    if (!ctx) return;
-    musicPlaying = true;
-
-    const masterGain = ctx.createGain();
-    masterGain.gain.value = 0.22;
-    masterGain.connect(ctx.destination);
-
-    // Deep sustained drone (low A)
-    const drone1 = ctx.createOscillator();
-    const droneGain1 = ctx.createGain();
-    drone1.type = 'sawtooth';
-    drone1.frequency.value = 55; // A1
-    droneGain1.gain.value = 0.06;
-    const droneFilter = ctx.createBiquadFilter();
-    droneFilter.type = 'lowpass';
-    droneFilter.frequency.value = 200;
-    droneFilter.Q.value = 4;
-    drone1.connect(droneFilter);
-    droneFilter.connect(droneGain1);
-    droneGain1.connect(masterGain);
-    drone1.start();
-
-    // Second drone — octave up for richness
-    const drone2 = ctx.createOscillator();
-    const droneGain2 = ctx.createGain();
-    drone2.type = 'sine';
-    drone2.frequency.value = 110; // A2
-    droneGain2.gain.value = 0.04;
-    drone2.connect(droneGain2);
-    droneGain2.connect(masterGain);
-    drone2.start();
-
-    // Atmospheric shimmer (slow LFO modulation)
-    const shimmer = ctx.createOscillator();
-    const shimmerGain = ctx.createGain();
-    shimmer.type = 'sine';
-    shimmer.frequency.value = 330; // E4
-    shimmerGain.gain.value = 0;
-    const shimmerLFO = ctx.createOscillator();
-    const shimmerLFOGain = ctx.createGain();
-    shimmerLFO.frequency.value = 0.15; // slow breathing
-    shimmerLFOGain.gain.value = 0.02;
-    shimmerLFO.connect(shimmerLFOGain);
-    shimmerLFOGain.connect(shimmerGain.gain);
-    shimmer.connect(shimmerGain);
-    shimmerGain.connect(masterGain);
-    shimmerLFO.start();
-    shimmer.start();
-
-    musicNodes = [drone1, drone2, shimmer, shimmerLFO];
-
-    // ═══ HEAVY BEAT HITS ═══
-    // Kick drum simulation — sine burst with pitch envelope
-    function playKick() {
-      if (muted || !musicPlaying) return;
-      const now = ctx.currentTime;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(120, now);
-      osc.frequency.exponentialRampToValueAtTime(40, now + 0.12);
-      gain.gain.setValueAtTime(0.55, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-      osc.connect(gain);
-      gain.connect(masterGain);
-      osc.start(now);
-      osc.stop(now + 0.3);
-
-      // Click transient for impact
-      const click = ctx.createOscillator();
-      const clickGain = ctx.createGain();
-      click.type = 'square';
-      click.frequency.value = 1500;
-      clickGain.gain.setValueAtTime(0.15, now);
-      clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
-      click.connect(clickGain);
-      clickGain.connect(masterGain);
-      click.start(now);
-      click.stop(now + 0.02);
+    if (!bgAudio) {
+      bgAudio = new Audio('https://raw.githubusercontent.com/euguilouren/euguilouren/main/assets/bg-music.mp3');
+      bgAudio.loop = true;
+      bgAudio.volume = 0.35;
+      bgAudio.preload = 'auto';
     }
-
-    // Sub bass hit — even deeper
-    function playSub() {
-      if (muted || !musicPlaying) return;
-      const now = ctx.currentTime;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(55, now);
-      osc.frequency.exponentialRampToValueAtTime(30, now + 0.25);
-      gain.gain.setValueAtTime(0.4, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
-      osc.connect(gain);
-      gain.connect(masterGain);
-      osc.start(now);
-      osc.stop(now + 0.5);
-    }
-
-    // Beat pattern: strong kick on 1 and 3, sub on 2, pattern every 2s
-    // BPM ~ 90, 4 beats = 2.67s
-    const BEAT = 667; // ms per beat (90 BPM)
-    let beatCount = 0;
-    beatInterval = setInterval(() => {
-      const bar = beatCount % 8;
-      // Heavy pattern
-      if (bar === 0 || bar === 4) playKick();              // kick on 1, 5
-      if (bar === 2) playSub();                             // sub on 3
-      if (bar === 6) { playKick(); setTimeout(playSub, 80); } // double hit on 7
-      beatCount++;
-    }, BEAT);
+    bgAudio.play().then(() => {
+      musicPlaying = true;
+    }).catch(err => {
+      console.log('Music autoplay blocked:', err);
+    });
   }
 
   function stopMusic() {
     musicPlaying = false;
-    if (beatInterval) { clearInterval(beatInterval); beatInterval = null; }
-    musicNodes.forEach(n => { try { n.stop(); } catch(e) {} });
-    musicNodes = [];
+    if (bgAudio) {
+      bgAudio.pause();
+      bgAudio.currentTime = 0;
+    }
   }
 
   // Unlock audio on first user interaction (browser requirement)
