@@ -612,7 +612,7 @@
     transform: translateY(-3px);
   }
   .modal-course-card:hover::before { opacity:1; }
-  .modal-course-icon { font-size: 28px; line-height:1; }
+  .modal-course-icon { font-size: 28px; line-height:1; display:flex; align-items:center; }
   .modal-course-name { 
     font-size: 12px; font-weight: 600; color: var(--white); 
     line-height: 1.4; flex:1;
@@ -730,7 +730,7 @@
   <div class="nav-links">
     <a href="#mentores">Mentores</a>
     <a href="#em-breve">Plataforma</a>
-    <a href="#em-breve" class="nav-cta">⌥ Acessar</a>
+    <a href="#em-breve" class="nav-cta">Acessar</a>
   </div>
   <div class="hamburger" onclick="toggleMenu()" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -740,7 +740,7 @@
 <div class="mobile-menu" id="mobile-menu">
   <a href="#mentores" onclick="closeMobile()">Mentores</a>
   <a href="#em-breve" onclick="closeMobile()">Plataforma</a>
-  <a href="#em-breve" onclick="closeMobile()">⌥ Acessar</a>
+  <a href="#em-breve" onclick="closeMobile()">Acessar</a>
 </div>
 
 <!-- HERO -->
@@ -758,7 +758,7 @@
     </div>
     <div class="hero-actions">
       <a href="#mentores" class="btn btn-primary">✦ Conheça os Mentores</a>
-      <a href="#em-breve" class="btn btn-outline">⌥ Acessar Plataforma</a>
+      <a href="#em-breve" class="btn btn-outline">Acessar Plataforma</a>
     </div>
   </div>
   <div class="scroll-hint">
@@ -843,19 +843,19 @@
 <!-- EM BREVE -->
 <section id="em-breve" style="text-align:center">
   <div class="coming-inner">
-  <div class="coming-badge">🔒 Coming Soon</div>
+  <div class="coming-badge">Em Breve</div>
   <h2 class="coming-title reveal">Plataforma de Cursos<br>em Construção</h2>
   <p class="coming-desc reveal">Em breve você poderá criar sua conta, acessar os cursos dos mentores e acompanhar sua evolução — tudo em um só lugar.</p>
   <div class="coming-features reveal">
-    <div class="coming-feat"><span>🎓</span> Cursos em Vídeo</div>
-    <div class="coming-feat"><span>🔐</span> Login Seguro</div>
-    <div class="coming-feat"><span>📊</span> Progresso Rastreado</div>
-    <div class="coming-feat"><span>🤝</span> Mentoria Direta</div>
-    <div class="coming-feat"><span>📜</span> Certificado</div>
+    <div class="coming-feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c3.33 1.33 8.67 1.33 12 0v-5"/></svg> Cursos em Vídeo</div>
+    <div class="coming-feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Login Seguro</div>
+    <div class="coming-feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg> Progresso Rastreado</div>
+    <div class="coming-feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> Mentoria Direta</div>
+    <div class="coming-feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> Certificado</div>
   </div>
   <div class="notify-form reveal">
     <input type="email" class="notify-input" placeholder="Seu melhor e-mail">
-    <button class="btn-notify" onclick="notifyClick(this)">✦ Avisar quando lançar</button>
+    <button class="btn-notify" onclick="notifyClick(this)">Avisar quando lançar</button>
   </div>
 </div>
 </section>
@@ -968,7 +968,7 @@ function notifyClick(btn) {
     <div class="modal-login-title">Acesso à Plataforma</div>
     <input class="modal-input" type="email" placeholder="Seu e-mail" disabled>
     <input class="modal-input" type="password" placeholder="Senha" disabled>
-    <button class="modal-btn-login" disabled>🔒 Entrar na Plataforma</button>
+    <button class="modal-btn-login" disabled>Entrar na Plataforma</button>
     <div class="modal-coming">Login disponível em breve — <span>estamos construindo</span> para você.</div>
     <a class="modal-profile-link" id="modal-profile-link" href="#">Ver perfil completo do mentor <b>→</b></a>
   </div>
@@ -984,9 +984,9 @@ const mentorData = {
     accent: '#C9A84C', accentRgb: '201,168,76',
     page: 'luan.html',
     courses: [
-      { name: 'Automação Contábil com Python', level: 'Intermediário', price: 'R$ 1.000', icon: '🐍', url: '' /* TODO: colar link Hotmart aqui */ },
-      { name: 'Engenharia de ERP/CRM na Prática', level: 'Avançado', price: 'R$ 1.000', icon: '⚙️', url: '' /* TODO: colar link Hotmart aqui */ },
-      { name: 'Compliance Regulatório para Devs', level: 'Avançado', price: 'R$ 1.000', icon: '📋', url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Automação Contábil com Python', level: 'Intermediário', price: 'R$ 1.000', icon: `<svg viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg' width='36' height='36'><path d='M20 6C13 6 9 9.5 9 14c0 3 1.5 5 4 6.5V22c0 1.5 1 2.5 2.5 2.5h9c1.5 0 2.5-1 2.5-2.5v-1.5c2.5-1.5 4-3.5 4-6.5C31 9.5 27 6 20 6z' fill='#3776AB' opacity='0.9'/><path d='M20 34C27 34 31 30.5 31 26c0-3-1.5-5-4-6.5V18c0-1.5-1-2.5-2.5-2.5h-9C14 15.5 13 16.5 13 18v1.5C10.5 21 9 23 9 26c0 4.5 4 8 11 8z' fill='#FFD43B' opacity='0.9'/><circle cx='16' cy='14' r='1.5' fill='white'/><circle cx='24' cy='26' r='1.5' fill='#3776AB'/></svg>`, url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Engenharia de ERP/CRM na Prática', level: 'Avançado', price: 'R$ 1.000', icon: `<svg viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg' width='36' height='36'><circle cx='20' cy='20' r='5' stroke='#C9A84C' stroke-width='2' fill='rgba(201,168,76,0.15)'/><path d='M20 8v3M20 29v3M8 20h3M29 20h3M11.5 11.5l2.1 2.1M26.4 26.4l2.1 2.1M11.5 28.5l2.1-2.1M26.4 13.6l2.1-2.1' stroke='#C9A84C' stroke-width='2' stroke-linecap='round'/></svg>`, url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Compliance Regulatório para Devs', level: 'Avançado', price: 'R$ 1.000', icon: `<svg viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg' width='36' height='36'><rect x='10' y='8' width='20' height='26' rx='3' stroke='#C9A84C' stroke-width='1.5' fill='rgba(201,168,76,0.08)'/><path d='M15 16h10M15 20h10M15 24h7' stroke='#C9A84C' stroke-width='1.5' stroke-linecap='round'/><rect x='15' y='6' width='10' height='4' rx='2' fill='#C9A84C' opacity='0.6'/></svg>`, url: '' /* TODO: colar link Hotmart aqui */ },
     ]
   },
   julia: {
@@ -997,9 +997,9 @@ const mentorData = {
     accent: '#E8DCC8', accentRgb: '232,220,200',
     page: 'julia.html',
     courses: [
-      { name: 'Estética de Alto Valor: Fundamentos', level: 'Iniciante', price: 'R$ 500', icon: '💎', url: '' /* TODO: colar link Hotmart aqui */ },
-      { name: 'Procedimentos Avançados em Skincare', level: 'Intermediário', price: 'R$ 500', icon: '✨', url: '' /* TODO: colar link Hotmart aqui */ },
-      { name: 'Negócio na Estética: do Zero ao Premium', level: 'Avançado', price: 'R$ 500', icon: '🏆', url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Estética de Alto Valor: Fundamentos', level: 'Iniciante', price: 'R$ 500', icon: `<svg viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg' width='36' height='36'><path d='M20 8L8 18l12 14 12-14L20 8z' stroke='#E8DCC8' stroke-width='1.5' fill='rgba(232,220,200,0.1)'/><path d='M8 18h24M14 12l6 6 6-6' stroke='#E8DCC8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>`, url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Procedimentos Avançados em Skincare', level: 'Intermediário', price: 'R$ 500', icon: `<svg viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg' width='36' height='36'><path d='M20 8v24M8 20h24' stroke='#E8DCC8' stroke-width='1.5' stroke-linecap='round' opacity='0.4'/><path d='M20 12l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z' fill='rgba(232,220,200,0.2)' stroke='#E8DCC8' stroke-width='1.5' stroke-linejoin='round'/></svg>`, url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Negócio na Estética: do Zero ao Premium', level: 'Avançado', price: 'R$ 500', icon: `<svg viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg' width='36' height='36'><path d='M14 10h12v8a6 6 0 01-12 0V10z' stroke='#E8DCC8' stroke-width='1.5' fill='rgba(232,220,200,0.1)'/><path d='M14 13H10a3 3 0 003 3M26 13h4a3 3 0 01-3 3' stroke='#E8DCC8' stroke-width='1.5' stroke-linecap='round'/><path d='M20 24v4M16 32h8' stroke='#E8DCC8' stroke-width='1.5' stroke-linecap='round'/></svg>`, url: '' /* TODO: colar link Hotmart aqui */ },
     ]
   },
   michael: {
@@ -1010,9 +1010,9 @@ const mentorData = {
     accent: '#8B5CF6', accentRgb: '139,92,246',
     page: 'michael.html',
     courses: [
-      { name: 'Lógica de Programação do Zero', level: 'Iniciante', price: 'R$ 500', icon: '🧠', url: '' /* TODO: colar link Hotmart aqui */ },
-      { name: 'Seu Primeiro Projeto Real com Python', level: 'Iniciante', price: 'R$ 500', icon: '🐍', url: '' /* TODO: colar link Hotmart aqui */ },
-      { name: 'Do Zero ao Desenvolvedor Júnior', level: 'Iniciante', price: 'R$ 500', icon: '🚀', url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Lógica de Programação do Zero', level: 'Iniciante', price: 'R$ 500', icon: `<svg viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg' width='36' height='36'><rect x='8' y='14' width='24' height='16' rx='3' stroke='#8B5CF6' stroke-width='1.5' fill='rgba(139,92,246,0.08)'/><path d='M12 20h4l3 4 3-8 3 4h3' stroke='#8B5CF6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/><path d='M14 10c0-2.2 1.8-4 4-4h4c2.2 0 4 1.8 4 4' stroke='#8B5CF6' stroke-width='1.5' stroke-linecap='round'/></svg>`, url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Seu Primeiro Projeto Real com Python', level: 'Iniciante', price: 'R$ 500', icon: `<svg viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg' width='36' height='36'><path d='M20 6C13 6 9 9.5 9 14c0 3 1.5 5 4 6.5V22c0 1.5 1 2.5 2.5 2.5h9c1.5 0 2.5-1 2.5-2.5v-1.5c2.5-1.5 4-3.5 4-6.5C31 9.5 27 6 20 6z' fill='#3776AB' opacity='0.9'/><path d='M20 34C27 34 31 30.5 31 26c0-3-1.5-5-4-6.5V18c0-1.5-1-2.5-2.5-2.5h-9C14 15.5 13 16.5 13 18v1.5C10.5 21 9 23 9 26c0 4.5 4 8 11 8z' fill='#FFD43B' opacity='0.9'/><circle cx='16' cy='14' r='1.5' fill='white'/><circle cx='24' cy='26' r='1.5' fill='#3776AB'/></svg>`, url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Do Zero ao Desenvolvedor Júnior', level: 'Iniciante', price: 'R$ 500', icon: `<svg viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg' width='36' height='36'><path d='M20 8c0 0 8 4 8 14l-8 10-8-10C12 12 20 8 20 8z' stroke='#8B5CF6' stroke-width='1.5' fill='rgba(139,92,246,0.1)'/><circle cx='20' cy='18' r='3' stroke='#8B5CF6' stroke-width='1.5' fill='rgba(139,92,246,0.2)'/><path d='M14 27l-4 5M26 27l4 5' stroke='#8B5CF6' stroke-width='1.5' stroke-linecap='round' opacity='0.5'/></svg>`, url: '' /* TODO: colar link Hotmart aqui */ },
     ]
   }
 };
@@ -1040,8 +1040,8 @@ function openModal(mentorKey) {
   coursesEl.innerHTML = d.courses.map(c => {
     const hasUrl = c.url && c.url.trim() !== '';
     const btn = hasUrl
-      ? `<a href="${c.url}" target="_blank" rel="noopener noreferrer" class="modal-course-buy active">🛒 Comprar no Hotmart</a>`
-      : `<span class="modal-course-buy soon">🔒 Em Breve</span>`;
+      ? `<a href="${c.url}" target="_blank" rel="noopener noreferrer" class="modal-course-buy active">Comprar no Hotmart</a>`
+      : `<span class="modal-course-buy soon">Em Breve</span>`;
     return `
     <div class="modal-course-card">
       <div class="modal-course-icon">${c.icon}</div>
