@@ -686,6 +686,32 @@
     -webkit-user-select: none; -moz-user-select: none; user-select: none;
   }
   @media print { body { display: none !important; } }
+
+  /* ── BOTÃO DE COMPRA NO MODAL ── */
+  .modal-course-buy {
+    display: block; width: 100%; margin-top: auto; padding-top: 12px;
+    text-align: center; font-size: 11px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 10px 16px; border-radius: 100px;
+    transition: background .25s, transform .25s, opacity .25s;
+    text-decoration: none;
+  }
+  .modal-course-buy.active {
+    background: rgba(var(--mc-rgb,201,168,76),0.15);
+    border: 1px solid rgba(var(--mc-rgb,201,168,76),0.4);
+    color: rgba(var(--mc-rgb,201,168,76),1);
+    cursor: pointer;
+  }
+  .modal-course-buy.active:hover {
+    background: rgba(var(--mc-rgb,201,168,76),0.25);
+    transform: translateY(-2px);
+  }
+  .modal-course-buy.soon {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--muted);
+    cursor: not-allowed;
+  }
 </style>
 </head>
 <body>
@@ -958,9 +984,9 @@ const mentorData = {
     accent: '#C9A84C', accentRgb: '201,168,76',
     page: 'luan.html',
     courses: [
-      { name: 'Automação Contábil com Python', level: 'Intermediário', price: 'R$ 1.000', icon: '🐍' },
-      { name: 'Engenharia de ERP/CRM na Prática', level: 'Avançado', price: 'R$ 1.000', icon: '⚙️' },
-      { name: 'Compliance Regulatório para Devs', level: 'Avançado', price: 'R$ 1.000', icon: '📋' },
+      { name: 'Automação Contábil com Python', level: 'Intermediário', price: 'R$ 1.000', icon: '🐍', url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Engenharia de ERP/CRM na Prática', level: 'Avançado', price: 'R$ 1.000', icon: '⚙️', url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Compliance Regulatório para Devs', level: 'Avançado', price: 'R$ 1.000', icon: '📋', url: '' /* TODO: colar link Hotmart aqui */ },
     ]
   },
   julia: {
@@ -971,9 +997,9 @@ const mentorData = {
     accent: '#E8DCC8', accentRgb: '232,220,200',
     page: 'julia.html',
     courses: [
-      { name: 'Estética de Alto Valor: Fundamentos', level: 'Iniciante', price: 'R$ 500', icon: '💎' },
-      { name: 'Procedimentos Avançados em Skincare', level: 'Intermediário', price: 'R$ 500', icon: '✨' },
-      { name: 'Negócio na Estética: do Zero ao Premium', level: 'Avançado', price: 'R$ 500', icon: '🏆' },
+      { name: 'Estética de Alto Valor: Fundamentos', level: 'Iniciante', price: 'R$ 500', icon: '💎', url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Procedimentos Avançados em Skincare', level: 'Intermediário', price: 'R$ 500', icon: '✨', url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Negócio na Estética: do Zero ao Premium', level: 'Avançado', price: 'R$ 500', icon: '🏆', url: '' /* TODO: colar link Hotmart aqui */ },
     ]
   },
   michael: {
@@ -984,9 +1010,9 @@ const mentorData = {
     accent: '#8B5CF6', accentRgb: '139,92,246',
     page: 'michael.html',
     courses: [
-      { name: 'Lógica de Programação do Zero', level: 'Iniciante', price: 'R$ 500', icon: '🧠' },
-      { name: 'Seu Primeiro Projeto Real com Python', level: 'Iniciante', price: 'R$ 500', icon: '🐍' },
-      { name: 'Do Zero ao Desenvolvedor Júnior', level: 'Iniciante', price: 'R$ 500', icon: '🚀' },
+      { name: 'Lógica de Programação do Zero', level: 'Iniciante', price: 'R$ 500', icon: '🧠', url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Seu Primeiro Projeto Real com Python', level: 'Iniciante', price: 'R$ 500', icon: '🐍', url: '' /* TODO: colar link Hotmart aqui */ },
+      { name: 'Do Zero ao Desenvolvedor Júnior', level: 'Iniciante', price: 'R$ 500', icon: '🚀', url: '' /* TODO: colar link Hotmart aqui */ },
     ]
   }
 };
@@ -1011,14 +1037,20 @@ function openModal(mentorKey) {
 
   // Courses — horizontal scroll cards
   const coursesEl = document.getElementById('modal-courses');
-  coursesEl.innerHTML = d.courses.map(c => `
+  coursesEl.innerHTML = d.courses.map(c => {
+    const hasUrl = c.url && c.url.trim() !== '';
+    const btn = hasUrl
+      ? `<a href="${'${c.url}'}" target="_blank" rel="noopener noreferrer" class="modal-course-buy active">🛒 Comprar no Hotmart</a>`
+      : `<span class="modal-course-buy soon">🔒 Em Breve</span>`;
+    return `
     <div class="modal-course-card">
-      <div class="modal-course-icon">${c.icon}</div>
-      <div class="modal-course-name">${c.name}</div>
-      <div class="modal-course-level">${c.level}</div>
-      <div class="modal-course-price">${c.price}</div>
-    </div>
-  `).join('');
+      <div class="modal-course-icon">${'${c.icon}'}</div>
+      <div class="modal-course-name">${'${c.name}'}</div>
+      <div class="modal-course-level">${'${c.level}'}</div>
+      <div class="modal-course-price">${'${c.price}'}</div>
+      ${btn}
+    </div>`;
+  }).join('');
 
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
