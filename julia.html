@@ -1075,11 +1075,16 @@
   /* Eye blink disabled — photo portrait differs from calibration */
   #eyes-layer { display:none !important; }
 
-  /* ── PAGE TRANSITIONS ── */
-  body { opacity: 0; animation: pageEnter 0.5s ease 0.1s forwards; }
-  @keyframes pageEnter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-  body.page-exit { animation: pageExit 0.38s ease forwards !important; }
-  @keyframes pageExit { to { opacity: 0; transform: translateY(-6px); } }
+  /* ── PAGE TRANSITIONS (overlay — não afeta fixed elements) ── */
+  #page-overlay {
+    position: fixed; inset: 0; z-index: 9990;
+    background: #080810;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.45s ease;
+  }
+  #page-overlay.visible { opacity: 1; }
+  #page-overlay.hidden  { opacity: 0; }
 
   /* ── MOBILE FIXES ── */
   @media(max-width:480px) {
@@ -1906,17 +1911,31 @@ document.querySelectorAll('.cert-card:not(.stagger-child), .proj-card:not(.stagg
 })();
 
 
-// ── PAGE TRANSITION (exit fade) ──
-document.querySelectorAll('a[href]').forEach(link => {
-  const href = link.getAttribute('href');
-  if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('http') || href.startsWith('https')) return;
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    const target = link.href;
-    document.body.classList.add('page-exit');
-    setTimeout(() => { window.location.href = target; }, 380);
+// ── PAGE TRANSITION OVERLAY ──
+(function() {
+  // Inject overlay if not present
+  let ov = document.getElementById('page-overlay');
+  if (!ov) {
+    ov = document.createElement('div');
+    ov.id = 'page-overlay';
+    document.body.prepend(ov);
+  }
+  // Fade in on load
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => { ov.classList.add('hidden'); });
   });
-});
+  // Fade out on link click
+  document.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('http') || href.startsWith('https')) return;
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = link.href;
+      ov.classList.remove('hidden');
+      setTimeout(() => { window.location.href = target; }, 420);
+    });
+  });
+})();
 
 </script>
 </div></div></div></body>
