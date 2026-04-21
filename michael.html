@@ -1082,18 +1082,16 @@
 </div>
 
 <!-- PHOTO — placeholder elegante até foto ser fornecida -->
-<div id="photo-layer" style="background:radial-gradient(ellipse 70% 80% at 50% 28%, rgba(139,92,246,0.07) 0%, rgba(139,92,246,0.02) 45%, rgba(8,8,16,0) 75%)">
-  <div style="position:absolute;top:10%;left:50%;transform:translateX(-50%);width:clamp(140px,28vw,260px);height:clamp(140px,28vw,260px);border-radius:50%;border:1px solid rgba(139,92,246,0.18);display:flex;align-items:center;justify-content:center;background:rgba(139,92,246,0.04);animation:breathe 7s ease-in-out infinite">
-    <span style="font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(22px,4.5vw,42px);font-weight:800;color:rgba(139,92,246,0.35);letter-spacing:4px">M·S</span>
-  </div>
+<div id="photo-layer">
+  <img id="photo-img" src="https://raw.githubusercontent.com/euguilouren/euguilouren/main/assets/michael-photo.jpg" alt="" decoding="async" fetchpriority="high">
 </div>
 
 <!-- LIGHT STREAKS -->
 <div id="light-streaks"></div>
 
 
-<!-- EYE BLINK LAYER — desativado (foto placeholder) -->
-<div id="eyes-layer" style="display:none">
+<!-- EYE BLINK LAYER -->
+<div id="eyes-layer">
   <div class="eye-pair">
     <div class="eye" id="eye-left">
       <div class="lid-top" id="lt-l"></div>
@@ -1382,12 +1380,20 @@ const lids     = [
 ];
 const photoLayer = document.getElementById('photo-layer');
 
-// ── PARALLAX on scroll (placeholder version) ──
+// ── PARALLAX on scroll ──
 window.addEventListener('scroll', () => {
-  const sy    = window.scrollY;
-  const hero  = document.getElementById('hero');
-  if (!hero) return;
-  const heroH = hero.offsetHeight;
+  const sy       = window.scrollY;
+  const heroH    = document.getElementById('hero').offsetHeight;
+  const progress = Math.min(sy / (heroH * 0.9), 1);
+
+  const scale = 1 + progress * 0.30;
+  const posY  = 15 + progress * 12;
+
+  if (photoImg) {
+    photoImg.style.transform       = `scale(${scale.toFixed(4)})`;
+    photoImg.style.transformOrigin = `center ${posY.toFixed(1)}%`;
+  }
+
   if (photoLayer) photoLayer.style.opacity = Math.max(0, 1 - sy / (heroH * 0.85));
 }, { passive: true });
 
