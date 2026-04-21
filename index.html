@@ -571,24 +571,68 @@
     font-weight: 600; letter-spacing: 0.5px;
   }
 
-  /* Cursos no modal */
-  .modal-courses { margin: 20px 0; display: flex; flex-direction: column; gap: 10px; }
-  .modal-course-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 14px 18px; border-radius: 12px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.06);
-    transition: background .2s, border-color .2s;
+  /* Cursos no modal — scroll horizontal */
+  .modal-courses {
+    margin: 20px -40px;
+    padding: 4px 0 16px;
+    overflow-x: auto;
+    overflow-y: visible;
+    display: flex;
+    gap: 12px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-left: 40px;
+    padding-right: 40px;
+    scrollbar-width: none;
   }
-  .modal-course-row:hover { background: rgba(var(--mc-rgb,201,168,76),0.05); border-color: rgba(var(--mc-rgb,201,168,76),0.2); }
-  .modal-course-name { font-size: 13px; color: var(--text); line-height: 1.3; }
-  .modal-course-level { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .modal-courses::-webkit-scrollbar { display: none; }
+  .modal-course-card {
+    flex: 0 0 210px;
+    scroll-snap-align: start;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(var(--mc-rgb,201,168,76),0.15);
+    border-radius: 16px;
+    padding: 20px 18px;
+    display: flex; flex-direction: column; gap: 10px;
+    position: relative; overflow: hidden;
+    transition: border-color .25s, box-shadow .25s, transform .3s;
+  }
+  .modal-course-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background: linear-gradient(90deg, transparent, rgba(var(--mc-rgb,201,168,76),0.6), transparent);
+    opacity:0; transition: opacity .25s;
+  }
+  .modal-course-card:hover { 
+    border-color: rgba(var(--mc-rgb,201,168,76),0.4);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    transform: translateY(-3px);
+  }
+  .modal-course-card:hover::before { opacity:1; }
+  .modal-course-icon { font-size: 28px; line-height:1; }
+  .modal-course-name { 
+    font-size: 12px; font-weight: 600; color: var(--white); 
+    line-height: 1.4; flex:1;
+  }
+  .modal-course-level { 
+    font-size: 10px; color: var(--muted); 
+    text-transform: uppercase; letter-spacing: 1px;
+  }
   .modal-course-price {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 15px; font-weight: 800;
+    font-size: 20px; font-weight: 800;
     color: rgba(var(--mc-rgb,201,168,76),1);
-    white-space: nowrap; margin-left: 16px;
-    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .modal-scroll-hint {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 4px;
+    opacity: 0.7;
+  }
+  .modal-scroll-hint svg { opacity:0.5; animation: hintSlide 1.8s ease-in-out infinite; }
+  @keyframes hintSlide {
+    0%,100% { transform: translateX(0); }
+    50%      { transform: translateX(5px); }
   }
 
   /* Login area */
@@ -881,6 +925,7 @@ function notifyClick(btn) {
         <div class="modal-mentor-tag" id="modal-specialty"></div>
       </div>
     </div>
+    <div class="modal-scroll-hint"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg> deslize para ver os cursos</div>
     <div class="modal-courses" id="modal-courses"></div>
     <div class="modal-login-title">Acesso à Plataforma</div>
     <input class="modal-input" type="email" placeholder="Seu e-mail" disabled>
@@ -901,9 +946,9 @@ const mentorData = {
     accent: '#C9A84C', accentRgb: '201,168,76',
     page: 'luan.html',
     courses: [
-      { name: 'Automação Contábil com Python', level: 'Intermediário', price: 'R$ 1.000' },
-      { name: 'Engenharia de ERP/CRM na Prática', level: 'Avançado', price: 'R$ 1.000' },
-      { name: 'Compliance Regulatório para Devs', level: 'Avançado', price: 'R$ 1.000' },
+      { name: 'Automação Contábil com Python', level: 'Intermediário', price: 'R$ 1.000', icon: '🐍' },
+      { name: 'Engenharia de ERP/CRM na Prática', level: 'Avançado', price: 'R$ 1.000', icon: '⚙️' },
+      { name: 'Compliance Regulatório para Devs', level: 'Avançado', price: 'R$ 1.000', icon: '📋' },
     ]
   },
   julia: {
@@ -914,9 +959,9 @@ const mentorData = {
     accent: '#E8DCC8', accentRgb: '232,220,200',
     page: 'julia.html',
     courses: [
-      { name: 'Estética de Alto Valor: Fundamentos', level: 'Iniciante', price: 'R$ 500' },
-      { name: 'Procedimentos Avançados em Skincare', level: 'Intermediário', price: 'R$ 500' },
-      { name: 'Negócio na Estética: do Zero ao Premium', level: 'Avançado', price: 'R$ 500' },
+      { name: 'Estética de Alto Valor: Fundamentos', level: 'Iniciante', price: 'R$ 500', icon: '💎' },
+      { name: 'Procedimentos Avançados em Skincare', level: 'Intermediário', price: 'R$ 500', icon: '✨' },
+      { name: 'Negócio na Estética: do Zero ao Premium', level: 'Avançado', price: 'R$ 500', icon: '🏆' },
     ]
   },
   michael: {
@@ -927,9 +972,9 @@ const mentorData = {
     accent: '#8B5CF6', accentRgb: '139,92,246',
     page: 'michael.html',
     courses: [
-      { name: 'Lógica de Programação do Zero', level: 'Iniciante', price: 'R$ 500' },
-      { name: 'Seu Primeiro Projeto Real com Python', level: 'Iniciante', price: 'R$ 500' },
-      { name: 'Do Zero ao Desenvolvedor Júnior', level: 'Iniciante', price: 'R$ 500' },
+      { name: 'Lógica de Programação do Zero', level: 'Iniciante', price: 'R$ 500', icon: '🧠' },
+      { name: 'Seu Primeiro Projeto Real com Python', level: 'Iniciante', price: 'R$ 500', icon: '🐍' },
+      { name: 'Do Zero ao Desenvolvedor Júnior', level: 'Iniciante', price: 'R$ 500', icon: '🚀' },
     ]
   }
 };
@@ -952,14 +997,13 @@ function openModal(mentorKey) {
   document.getElementById('modal-specialty').textContent = d.specialty;
   document.getElementById('modal-profile-link').href = d.page;
 
-  // Courses
+  // Courses — horizontal scroll cards
   const coursesEl = document.getElementById('modal-courses');
   coursesEl.innerHTML = d.courses.map(c => `
-    <div class="modal-course-row">
-      <div>
-        <div class="modal-course-name">${c.name}</div>
-        <div class="modal-course-level">${c.level}</div>
-      </div>
+    <div class="modal-course-card">
+      <div class="modal-course-icon">${c.icon}</div>
+      <div class="modal-course-name">${c.name}</div>
+      <div class="modal-course-level">${c.level}</div>
       <div class="modal-course-price">${c.price}</div>
     </div>
   `).join('');
