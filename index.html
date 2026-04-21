@@ -434,6 +434,77 @@
     90%  { opacity: 0.8; }
     100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }
   }
+
+  /* ── PAGE TRANSITIONS ── */
+  body { opacity: 0; animation: pageEnter 0.5s ease 0.1s forwards; }
+  @keyframes pageEnter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  body.page-exit { animation: pageExit 0.38s ease forwards !important; }
+  @keyframes pageExit { to { opacity: 0; transform: translateY(-6px); } }
+
+  /* ── MOBILE FIXES ── */
+  @media(max-width:480px) {
+    .notify-input, input[type="email"] { min-width: 0 !important; width: 100% !important; }
+    .notify-form, .hero-actions { flex-direction: column; align-items: stretch; }
+    .hero-actions .btn { justify-content: center; }
+    .cert-grid { grid-template-columns: 1fr !important; }
+    .course-grid { grid-template-columns: 1fr !important; }
+    .contact-grid { grid-template-columns: 1fr !important; }
+  }
+
+  /* ── MENTOR CARD IMPROVEMENTS ── */
+  .mentor-card { cursor: pointer; }
+  .mentor-photo-wrap {
+    transition: transform .4s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+  }
+  .mentor-card:hover .mentor-photo-wrap {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 4px rgba(var(--mc-rgb), 0.2), 0 0 20px rgba(var(--mc-rgb), 0.15);
+  }
+  .mentor-btn { position: relative; overflow: hidden; }
+  .mentor-btn::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(var(--mc-rgb), 0.0);
+    transition: background .25s;
+  }
+  .mentor-btn:hover::after { background: rgba(var(--mc-rgb), 0.08); }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+    padding: 40px 24px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    background: var(--surface);
+    margin: 0;
+  }
+  .stat-item { text-align: center; }
+  .stat-val {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 36px; font-weight: 800;
+    background: linear-gradient(135deg, #e8c96a 0%, #C9A84C 50%, #a07830 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: block; line-height: 1;
+  }
+  .stat-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 6px; display: block; }
+  @media(max-width:480px) { .stats-bar { gap: 24px; } .stat-val { font-size: 28px; } }
+
+  /* ── COMING SOON VISUAL ── */
+  .coming-inner {
+    background: var(--surface);
+    border: 1px solid rgba(201,168,76,0.1);
+    border-radius: 24px;
+    padding: 64px 48px;
+    position: relative; overflow: hidden;
+    max-width: 720px; margin: 0 auto;
+  }
+  .coming-inner::before {
+    content: '';
+    position: absolute; top: -1px; left: 20%; right: 20%; height: 2px;
+    background: linear-gradient(90deg, transparent, #C9A84C, transparent);
+  }
+  @media(max-width:600px) { .coming-inner { padding: 40px 24px; } }
 </style>
 </head>
 <body>
@@ -488,6 +559,15 @@
     scroll
   </div>
 </section>
+
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item"><span class="stat-val">3</span><span class="stat-label">Mentores</span></div>
+  <div class="stat-item"><span class="stat-val">9</span><span class="stat-label">Cursos</span></div>
+  <div class="stat-item"><span class="stat-val">100%</span><span class="stat-label">Online</span></div>
+  <div class="stat-item"><span class="stat-val">0→</span><span class="stat-label">Do Zero ao Mercado</span></div>
+</div>
 
 <div class="divider"><div class="divider-diamond"></div></div>
 
@@ -555,6 +635,7 @@
 
 <!-- EM BREVE -->
 <section id="em-breve" style="text-align:center">
+  <div class="coming-inner">
   <div class="coming-badge">🔒 Coming Soon</div>
   <h2 class="coming-title reveal">Plataforma de Cursos<br>em Construção</h2>
   <p class="coming-desc reveal">Em breve você poderá criar sua conta, acessar os cursos dos mentores e acompanhar sua evolução — tudo em um só lugar.</p>
@@ -569,6 +650,7 @@
     <input type="email" class="notify-input" placeholder="Seu melhor e-mail">
     <button class="btn-notify" onclick="notifyClick(this)">✦ Avisar quando lançar</button>
   </div>
+</div>
 </section>
 
 <div class="divider"><div class="divider-diamond"></div></div>
@@ -633,6 +715,19 @@ function notifyClick(btn) {
     container.appendChild(dot);
   }
 })();
+
+// ── PAGE TRANSITION (exit fade) ──
+document.querySelectorAll('a[href]').forEach(link => {
+  const href = link.getAttribute('href');
+  if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('http') || href.startsWith('https')) return;
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = link.href;
+    document.body.classList.add('page-exit');
+    setTimeout(() => { window.location.href = target; }, 380);
+  });
+});
+
 </script>
 </body>
 </html>

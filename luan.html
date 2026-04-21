@@ -1049,6 +1049,70 @@
     100% { transform: translateX(100%); }
   }
 
+
+  /* ── PAGE TRANSITIONS ── */
+  body { opacity: 0; animation: pageEnter 0.5s ease 0.1s forwards; }
+  @keyframes pageEnter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  body.page-exit { animation: pageExit 0.38s ease forwards !important; }
+  @keyframes pageExit { to { opacity: 0; transform: translateY(-6px); } }
+
+  /* ── MOBILE FIXES ── */
+  @media(max-width:480px) {
+    .notify-input, input[type="email"] { min-width: 0 !important; width: 100% !important; }
+    .notify-form, .hero-actions { flex-direction: column; align-items: stretch; }
+    .hero-actions .btn { justify-content: center; }
+    .cert-grid { grid-template-columns: 1fr !important; }
+    .course-grid { grid-template-columns: 1fr !important; }
+    .contact-grid { grid-template-columns: 1fr !important; }
+  }
+
+  /* ── POLISH: Improved reveals ── */
+  .reveal-left { opacity:0; transform:translateX(-20px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal-left.visible { opacity:1; transform:none; }
+  .reveal-right { opacity:0; transform:translateX(20px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal-right.visible { opacity:1; transform:none; }
+
+  /* ── POLISH: Course card improvements ── */
+  .course-card { transition: transform .4s cubic-bezier(.34,1.56,.64,1), border-color .3s, box-shadow .3s; }
+  .course-icon { transition: transform .4s cubic-bezier(.34,1.56,.64,1); display:block; }
+  .course-card:hover .course-icon { transform: scale(1.2) rotate(-5deg); }
+  .course-card .btn { transition: background .25s, transform .25s, opacity .25s; }
+
+  /* ── POLISH: About stats pulse on hover ── */
+  .about-stat { transition: transform .35s cubic-bezier(.34,1.56,.64,1), border-color .3s, box-shadow .3s; }
+
+  /* ── POLISH: Section tag glow ── */
+  .section-tag { 
+    text-shadow: 0 0 20px rgba(201,168,76,0.4);
+    animation: tagPulse 3s ease-in-out infinite;
+  }
+  @keyframes tagPulse {
+    0%,100% { opacity:.8; }
+    50%      { opacity:1; }
+  }
+
+  /* ── POLISH: Better scroll arrow ── */
+  .scroll-down-arrow {
+    animation: arrowBounce 1.8s ease-in-out infinite;
+  }
+  @keyframes arrowBounce {
+    0%,100% { transform: translateY(0); opacity:.6; }
+    50%      { transform: translateY(8px); opacity:1; }
+  }
+
+  /* ── POLISH: Nav link active underline ── */
+  .nav-links a { position: relative; }
+  .nav-links a::after {
+    content:''; position:absolute; bottom:-4px; left:0; right:0; height:1px;
+    background: var(--gold); transform:scaleX(0); transition:transform .25s ease;
+    transform-origin: left;
+  }
+  .nav-links a:hover::after { transform:scaleX(1); }
+
+  /* ── POLISH: Contact card improvements ── */
+  .contact-card { transition: transform .35s cubic-bezier(.34,1.56,.64,1), border-color .3s, box-shadow .3s, background .3s; }
+  .contact-icon { transition: transform .35s cubic-bezier(.34,1.56,.64,1); }
+  .contact-card:hover .contact-icon { transform: scale(1.15) rotate(5deg); }
 </style>
 </head>
 <body>
@@ -1899,6 +1963,19 @@ document.querySelectorAll('.cert-card:not(.stagger-child), .proj-card:not(.stagg
   });
   document.body.appendChild(muteBtn);
 })();
+
+
+// ── PAGE TRANSITION (exit fade) ──
+document.querySelectorAll('a[href]').forEach(link => {
+  const href = link.getAttribute('href');
+  if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('http') || href.startsWith('https')) return;
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = link.href;
+    document.body.classList.add('page-exit');
+    setTimeout(() => { window.location.href = target; }, 380);
+  });
+});
 
 </script>
 </div></div></div></body>
