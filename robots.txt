@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://euguilouren.github.io/euguilouren/sitemap.xml
+Sitemap: https://euguilouren.github.io/CursosHUB/sitemap.xml
